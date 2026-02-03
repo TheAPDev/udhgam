@@ -1,3 +1,4 @@
+
 import { supabase } from '../../supabaseClient';
 import { useState } from 'react';
 
@@ -9,6 +10,11 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    if (!supabase) {
+      alert('Supabase client not initialized. Please check your environment variables.');
+      setLoading(false);
+      return;
+    }
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -23,6 +29,10 @@ export default function Login() {
   };
 
   const handleSignUp = async () => {
+    if (!supabase) {
+      alert('Supabase client not initialized. Please check your environment variables.');
+      return;
+    }
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -33,6 +43,7 @@ export default function Login() {
 
   return (
     <form onSubmit={handleLogin}>
+      <h2>Sign in to <span style={{ color: '#4f46e5', fontWeight: 700 }}>Hunerz</span></h2>
       <input
         type="email"
         placeholder="you@example.com"
