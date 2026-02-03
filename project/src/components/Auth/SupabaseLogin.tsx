@@ -15,6 +15,12 @@ export default function Login() {
       setLoading(false);
       return;
     }
+    // Defensive: supabase may be undefined, so check before calling .auth
+    if (!('auth' in supabase)) {
+      alert('Supabase client is not properly initialized.');
+      setLoading(false);
+      return;
+    }
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -31,6 +37,10 @@ export default function Login() {
   const handleSignUp = async () => {
     if (!supabase) {
       alert('Supabase client not initialized. Please check your environment variables.');
+      return;
+    }
+    if (!('auth' in supabase)) {
+      alert('Supabase client is not properly initialized.');
       return;
     }
     const { error } = await supabase.auth.signUp({
